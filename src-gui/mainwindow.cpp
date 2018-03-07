@@ -26,15 +26,16 @@ MainWindow::MainWindow( QWidget *parent ) :
     QMainWindow( parent ),
     ui( new Ui::MainWindow )
 {
-    runTunTap();
+ //   runTunTap();
     ui->setupUi( this );
     ui->peerListWidget_2->setMainWindow( this );
 
 
-
-    QString ip = getLocalIps().at( 0 );
-    QString vip = getLocalVips().at( 0 ).split( '%' ).at( 0 );
-    ui->quickStart->setIps( ip,vip );
+	if(getLocalIps().size()>0 && getLocalVips().size()>0){
+		QString ip = getLocalIps().at( 0 );
+		QString vip = getLocalVips().at( 0 ).split( '%' ).at( 0 );
+	   ui->quickStart->setIps( ip,vip );
+	}
     connect( ui->quickStart,SIGNAL( connectNet( QString ) ),this,SLOT( connectToNet( QString ) ) );
     connect( ui->quickStart,SIGNAL( createNet() ),this,SLOT( createNet() ) );
     connect( ui->quickStart, SIGNAL( allowFriend( bool ) ),this,SLOT( onAllowFriend( bool ) ) );
@@ -52,7 +53,7 @@ MainWindow::MainWindow( QWidget *parent ) :
     m_cmd_exec = new commandExecutor( this ) ;
     m_sender = new CommandSender( m_cmd_exec,this );
     m_cmd_exec->setSender( m_sender );
-    loadSettings();
+	loadSettings();
 
     ui->statusBar->addPermanentWidget( m_status_form );
     connect( m_status_form,SIGNAL( netConnect( bool ) ),this,SLOT( onNetConnected( bool ) ) );
@@ -63,8 +64,8 @@ MainWindow::MainWindow( QWidget *parent ) :
 
     m_tun_process = std::make_unique<tunserverProcess>();
 
-    QSound sound(":/sound");
-    sound.play();
+  //  QSound sound(":/sound");
+   // sound.play();
 
 
 }

@@ -7,9 +7,6 @@
 QT       += core gui network multimedia
 MOBILITY += multimedia
 greaterThan(QT_MAJOR_VERSION, 4.8): QT += widgets
-
-QMAKE_CC = gcc
-QMAKE_CXX = g++
 CONFIG += c++14
 QMAKE_CXXFLAGS += -std=c++14 -Wall -Wextra -pedantic
 
@@ -100,11 +97,11 @@ FORMS += \
 
 
 debug {
-	DESTDIR = build/debug
+ DESTDIR = build/debug
 }
 
 release {
-	DESTDIR = build/release
+ DESTDIR = build/release
 }
 
 
@@ -126,6 +123,29 @@ test {
     message(Normal build)
 }
 
+ANDROID_EXTRA_LIBS *= /home/jakub/android-ndk-r16b/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so
+ANDROID_EXTRA_LIBS *= /home/jakub/libsodium/libsodium-android-armv7-a/lib/libsodium.so
+
+android:{
+
+    QMAKE_CC = /home/jakub/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc
+    QMAKE_CXX = /home/jakub/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++
+
+    INCLUDEPATH += /home/jakub/Boost-for-Android/build/out/armeabi-v7a/include/boost-1_66/
+    INCLUDEPATH += /home/jakub/libsodium/libsodium-android-armv7-a/include
+    INCLUDEPATH += /home/jakub/android-ndk-r16b/sources/cxx-stl/llvm-libc++/include
+    equals(ANDROID_TARGET_ARCH, armeabi-v7a){
+        LIBS += -L/home/jakub/Boost-for-Android/build/out/armeabi-v7a/lib -lboost_system-clang-mt-a32-1_66
+        LIBS += -L/home/jakub/android-ndk-r16b/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a -lc++_shared
+        LIBS += -L/home/jakub/libsodium/libsodium-android-armv7-a/lib -lsodium
+    }
+}
+
+!android:{
+    QMAKE_CC = gcc
+    QMAKE_CXX = g++
+}
+
 
 macos {
         LIBS += -L /usr/local/lib -lsodium
@@ -133,6 +153,8 @@ macos {
         INCLUDEPATH += $$PWD/../depends/json/src/
 
 }
+
+
 
 win32: LIBS += -L$$PWD/../../repo/libsodium-win32/lib/ -lsodium
 linux: LIBS += -lsodium
@@ -151,4 +173,15 @@ TRANSLATIONS = hellotr_pl.ts
 RESOURCES += \
     icons.qrc \
     sounds.qrc
+
+DISTFILES += \
+    android/AndroidManifest.xml \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/res/values/libs.xml \
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

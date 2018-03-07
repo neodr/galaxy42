@@ -43,15 +43,15 @@ QVariant peersModel::data( const QModelIndex &index, int role ) const
     if( role == Qt::DisplayRole ) {
 
         switch ( static_cast <Columns>(index.column()) ) {
-        case Columns::name:
+		case Columns::name:
             return m_peers_list.at( index.row() )->getName();
-        case Columns::ip:
+		case Columns::ip:
             return m_peers_list.at( index.row() )->getIp();
-        case Columns::vip:
+		case Columns::vip:
             return m_peers_list.at( index.row() )->getVip();
-        case Columns::invitation:
+		case Columns::invitation:
             return m_peers_list.at( index.row() )->getInvitation();
-        case Columns::status:
+		case Columns::status:
             return static_cast<int>(m_peers_list.at(index.row() )->status);
         default:
             return QVariant();
@@ -84,7 +84,7 @@ QVariant peersModel::data( const QModelIndex &index, int role ) const
         default:
             break;
         }
-    } else if( role == Qt::ForegroundRole ) {
+	} else if( role == Qt::ForegroundRole ) {
         switch ( m_peers_list.at( index.row() )->comm_status ) {
         case MeshPeer::COMMANDSTATUS::sended:
             return QBrush( QColor( Qt::darkYellow ) );
@@ -136,7 +136,7 @@ void peersModel::addPeer( QString serialized_peer )
     auto idx = index( 0,0 );
 
     beginInsertRows( idx,0,1 );
-    m_peers_list.push_back( peer );
+	m_peers_list.push_back( peer );
     endInsertRows();
 }
 
@@ -158,7 +158,7 @@ void peersModel::addPeer( const MeshPeer &pp )
 
         QModelIndex ix = index( m_peers_list.size() );
         beginInsertRows( ix,m_peers_list.size(),m_peers_list.size()+1 );
-        m_peers_list.push_back( peer );
+		m_peers_list.push_back( peer );
         endInsertRows();
     } catch ( std::runtime_error &e ) {
         //! @todo dodac okno dialogowe bledu
@@ -193,7 +193,7 @@ void peersModel::confirmAddPeer( const MeshPeer& peer )
         pp->status = MeshPeer::STATUS::connected;
         pp->comm_status = MeshPeer::COMMANDSTATUS::acknowled;
         pp->setName( "quick add" );
-        m_peers_list.push_back( pp );
+		m_peers_list.push_back( pp );
         endInsertRows();
     }
 }
@@ -311,7 +311,7 @@ void peersModel::banAllPeers()
 void  peersModel::startActionOnIndex(const QModelIndex &index)
 {
     try {
-        size_t i = index.row();
+		size_t i = index.row();
         m_peers_list.at(i)->comm_status = MeshPeer::COMMANDSTATUS::sended;
     } catch(std::exception &e) {
         qDebug()<<e.what();

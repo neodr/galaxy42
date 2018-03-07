@@ -90,7 +90,7 @@ int addressModel::columnCount(const QModelIndex &parent) const
 {
     if (!parent.isValid())
         return 0;
-    return m_enabled_columns.size();
+	return m_enabled_columns.size();
 
 }
 
@@ -162,27 +162,27 @@ QVariant addressModel::getData(const QModelIndex &index) const
 {
         switch (static_cast< ColumnRoles>(index.column())) {
 
-        case ColumnRoles::state:
-            return static_cast<int>(m_peers.at(index.row())->status);
+		case ColumnRoles::state:
+			return static_cast<int>(m_peers.at(index.row())->status);
             break;
 
-        case ColumnRoles::name:
-            return m_peers.at(index.row())->getName();
+		case ColumnRoles::name:
+			return m_peers.at(index.row())->getName();
             break;
 
-        case ColumnRoles::ip:
-            return m_peers.at(index.row())->getIp();
+		case ColumnRoles::ip:
+			return m_peers.at(index.row())->getIp();
             break;
 
-        case ColumnRoles::vip:
-            return m_peers.at(index.row())->getVip();
+		case ColumnRoles::vip:
+			return m_peers.at(index.row())->getVip();
             break;
 
-        case ColumnRoles::port:
-            return m_peers.at(index.row())->getPort();
+		case ColumnRoles::port:
+			return m_peers.at(index.row())->getPort();
             break;
 
-        case ColumnRoles::vip_port:
+		case ColumnRoles::vip_port:
             return m_peers.at(index.row())->getVipPort();
             break;
 
@@ -191,12 +191,12 @@ QVariant addressModel::getData(const QModelIndex &index) const
             return QVariant();
             break;
 
-        case ColumnRoles::comm_status:
+		case ColumnRoles::comm_status:
             return static_cast<int>(m_peers.at(index.row())->status);
             break;
     default:
         break;
-    }
+	}
     return QVariant();
 }
 
@@ -319,7 +319,7 @@ void addressModel::addPeer(MeshPeer* peer)
 {
 
 //    beginInsertRows();
-    m_peers.push_back(peer);
+	m_peers.push_back(peer);
 //    endInsertRows();
 
 }
@@ -328,7 +328,7 @@ void addressModel::addPeers(QList<MeshPeer*> peers)
 {
 //    beginInsertRows(index(m_peers.size(),0));
     for(auto it :peers) {
-        m_peers.push_back(it);
+		m_peers.push_back(it);
     }
 //    endInsertRows();
 }

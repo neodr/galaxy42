@@ -6,6 +6,7 @@
 #include <sodium.h>
 #include "dataeater.hpp"
 #include "commandexecutor.hpp"
+#include <array>
 
 class commandExecutor;
 
