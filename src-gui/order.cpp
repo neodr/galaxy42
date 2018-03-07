@@ -178,10 +178,10 @@ addPeerOrder::addPeerOrder( const RpcId& id,const MeshPeer& peer ):order( id )
 
 addPeerOrder::addPeerOrder( const std::string &json_str,commandExecutor * executor ) : order( json_str )
 {
+	m_executor = executor;
     try {
         using nlohmann::json;
         json j = json::parse( json_str );
-        m_executor = executor;
         m_msg = j["msg"];
         m_state = j["state"];
         m_id = j["id"];
@@ -450,6 +450,7 @@ std::string order::getPeerName()
 
 getClientName::getClientName( const std::string &json_str,commandExecutor *executor )
 {
+	m_executor = executor;
     try {
         nlohmann::json j = nlohmann::json::parse( json_str );
         m_state = j["state"];
@@ -457,7 +458,6 @@ getClientName::getClientName( const std::string &json_str,commandExecutor *execu
         if(m_state == "ok") {
             m_account = j["account_address"];
         }
-        m_executor = executor;
     } catch( std::exception &e ) {
         qDebug()<<e.what();
     }
@@ -509,7 +509,12 @@ statusOrder::statusOrder(const std::string &json_str,commandExecutor *executor)
     try{
         nlohmann::json j = nlohmann::json::parse( json_str );
         m_state = j["state"];
-        m_satoshi = j["btc"];
+		if(m_state == "ok") {
+			m_satoshi = j["btc"];
+		} else {
+			m_msg = j["msg"];
+		}
+
     } catch (std::exception &e) {
         qDebug()<< "parser error while reding: "<<json_str.c_str();
     }
@@ -566,6 +571,7 @@ payOrder::payOrder(const RpcId& id,const MeshPeer &peer ,int satoshi)
 void statusOrder::execute(MainWindow &main_window)
 {
     if(m_state == "ok") main_window.setBtc(m_satoshi);
+	else{main_window.setDebugInfo(QString::fromStdString(std::string("Wallet problem:") + m_msg));}
 //    else main_window.setDebugInfo(m_msg);
 }
 
