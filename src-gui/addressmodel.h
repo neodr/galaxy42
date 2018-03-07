@@ -4,7 +4,6 @@
 #include <QAbstractItemModel>
 #include <QList>
 #include "meshpeer.h"
-#include <QDebug>
 
 class addressModel : public QAbstractItemModel
 {
